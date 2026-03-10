@@ -41,8 +41,16 @@ make init
 make test
 ```
 
-### 4. Run lint/format checks (optional)
+### 4. Run main checks (optional)
 
 ```bash
 make check
+```
+
+This runs `isort`, `black`, and `flake8` against `src/`, plus `pytest`.
+
+### 5. Run test-file style checks separately (optional)
+
+```bash
+make check-tests
 ```

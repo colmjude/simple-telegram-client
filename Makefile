@@ -1,4 +1,4 @@
-.PHONY: init test lint format check
+.PHONY: init test lint format check check-tests
 
 init::
 	python -m pip install --upgrade pip
@@ -18,7 +18,12 @@ format:
 	python -m black src tests
 
 check:
-	python -m isort --check-only src tests
-	python -m black --check src tests
-	python -m flake8 src tests
+	python -m isort --check-only src
+	python -m black --check src
+	python -m flake8 src
 	python -m pytest
+
+check-tests:
+	python -m isort --check-only tests
+	python -m black --check tests
+	python -m flake8 tests
