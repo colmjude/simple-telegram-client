@@ -1,0 +1,5 @@
+-r requirements.in
+pytest>=8,<9
+black>=24,<26
+flake8>=7,<8
+isort>=5,<6
