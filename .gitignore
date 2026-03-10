@@ -210,3 +210,8 @@ __marimo__/
 .codex
 AGENTS.md
 agent_memory/
+
+__pycache__/
+*.pyc
+
+examples/test_config.json
