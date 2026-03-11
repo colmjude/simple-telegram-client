@@ -28,6 +28,19 @@ def test_load_telegram_config_returns_validated_config(tmp_path) -> None:
     assert config["parse_mode"] == "Markdown"
 
 
+def test_load_telegram_config_allows_token_only(tmp_path) -> None:
+    config_file = tmp_path / "config.json"
+    config_file.write_text(
+        json.dumps({"telegram": {"token": "token-1"}}),
+        encoding="utf-8",
+    )
+
+    config = config_module.load_telegram_config(config_file)
+
+    assert config["token"] == "token-1"
+    assert "chat_id" not in config
+
+
 def test_load_telegram_config_raises_for_missing_file(tmp_path) -> None:
     missing_path = tmp_path / "missing.json"
 
@@ -53,7 +66,21 @@ def test_load_telegram_config_raises_for_missing_telegram_block(tmp_path) -> Non
 
 def test_load_telegram_config_raises_for_missing_required_keys(tmp_path) -> None:
     config_file = tmp_path / "config.json"
-    config_file.write_text(json.dumps({"telegram": {"token": "abc"}}), encoding="utf-8")
+    config_file.write_text(
+        json.dumps({"telegram": {"chat_id": "chat-1"}}),
+        encoding="utf-8",
+    )
+
+    with pytest.raises(exc.TelegramConfigError, match="telegram.token"):
+        config_module.load_telegram_config(config_file)
+
+
+def test_load_telegram_config_raises_for_invalid_chat_id_type(tmp_path) -> None:
+    config_file = tmp_path / "config.json"
+    config_file.write_text(
+        json.dumps({"telegram": {"token": "token-1", "chat_id": 123}}),
+        encoding="utf-8",
+    )
 
     with pytest.raises(exc.TelegramConfigError, match="telegram.chat_id"):
         config_module.load_telegram_config(config_file)

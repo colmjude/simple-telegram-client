@@ -4,10 +4,10 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "simple-telegram-client"
-version = "0.1.0"
+version = "0.2.0"
 description = "Small reusable Python client for sending Telegram messages from JSON config"
 readme = "README.md"
-requires-python = ">=3.11"
+requires-python = ">=3.10"
 authors = [{ name = "Colm Britton" }]
 dependencies = []
 
@@ -23,7 +23,7 @@ addopts = "-q"
 
 [tool.black]
 line-length = 88
-target-version = ["py311"]
+target-version = ["py310"]
 
 [tool.isort]
 profile = "black"

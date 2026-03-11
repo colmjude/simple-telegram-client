@@ -35,7 +35,9 @@ def get_telegram_config(config: dict[str, Any]) -> dict[str, Any]:
     """Extract the top-level telegram config block."""
     telegram_config = config.get("telegram")
     if not isinstance(telegram_config, dict):
-        raise TelegramConfigError("Missing or invalid top-level 'telegram' config section")
+        raise TelegramConfigError(
+            "Missing or invalid top-level 'telegram' config section"
+        )
     return telegram_config
 
 
@@ -47,12 +49,16 @@ def validate_telegram_config(telegram_config: dict[str, Any]) -> dict[str, str]:
 
     if not isinstance(token, str) or not token.strip():
         raise TelegramConfigError("Missing or invalid 'telegram.token'")
-    if not isinstance(chat_id, str) or not chat_id.strip():
-        raise TelegramConfigError("Missing or invalid 'telegram.chat_id'")
+    if chat_id is not None and (not isinstance(chat_id, str) or not chat_id.strip()):
+        raise TelegramConfigError(
+            "Invalid 'telegram.chat_id': must be a non-empty string"
+        )
     if parse_mode is not None and not isinstance(parse_mode, str):
         raise TelegramConfigError("Invalid 'telegram.parse_mode': must be a string")
 
-    validated: dict[str, str] = {"token": token, "chat_id": chat_id}
+    validated: dict[str, str] = {"token": token}
+    if isinstance(chat_id, str) and chat_id.strip():
+        validated["chat_id"] = chat_id
     if parse_mode is not None and parse_mode.strip():
         validated["parse_mode"] = parse_mode
     return validated

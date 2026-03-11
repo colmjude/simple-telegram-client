@@ -24,7 +24,7 @@ def test_chunk_text_raises_for_invalid_max_length() -> None:
 
 
 def test_build_send_message_payload_omits_parse_mode_when_none() -> None:
-    payload = utils.build_send_message_payload(chat_id="123", text="hello")
+    payload = utils.build_send_message_payload(chat_id=123, text="hello")
     assert payload == {"chat_id": "123", "text": "hello"}
 
 
@@ -42,6 +42,27 @@ def test_build_send_message_url() -> None:
         utils.build_send_message_url("abc")
         == "https://api.telegram.org/botabc/sendMessage"
     )
+
+
+def test_build_get_updates_url() -> None:
+    assert (
+        utils.build_get_updates_url("abc")
+        == "https://api.telegram.org/botabc/getUpdates"
+    )
+
+
+def test_build_get_updates_payload_with_all_options() -> None:
+    payload = utils.build_get_updates_payload(
+        offset=100,
+        timeout=10,
+        allowed_updates=["message"],
+    )
+    assert payload == {"offset": 100, "timeout": 10, "allowed_updates": ["message"]}
+
+
+def test_build_get_updates_payload_defaults() -> None:
+    payload = utils.build_get_updates_payload()
+    assert payload == {"timeout": 30}
 
 
 def test_read_text_file_reads_content(tmp_path) -> None:
